@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@config "../tailwind.config.ts";
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -190,11 +192,19 @@
 
 /* Gradient backgrounds */
 .bg-gradient-1 {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .bg-gradient-2 {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 /* Animated border */
@@ -213,7 +223,16 @@
   bottom: 0;
   border-radius: 0.5rem;
   padding: 2px;
-  background: linear-gradient(45deg, #c084fc, #8b5cf6, #6d28d9, #4c1d95, #6d28d9, #8b5cf6, #c084fc);
+  background: linear-gradient(
+    45deg,
+    #c084fc,
+    #8b5cf6,
+    #6d28d9,
+    #4c1d95,
+    #6d28d9,
+    #8b5cf6,
+    #c084fc
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

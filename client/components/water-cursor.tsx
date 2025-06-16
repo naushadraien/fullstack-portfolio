@@ -159,7 +159,7 @@ export default function WaterCursor() {
         transition={{ type: "spring", stiffness: 500, damping: 28 }}
       >
         <div
-          className="w-8 h-8 rounded-full bg-blue-400/30 backdrop-blur-xs border border-blue-300/50"
+          className="w-8 h-8 rounded-full bg-blue-400/30 backdrop-blur-sm border border-blue-300/50"
           style={{ boxShadow: "0 0 20px rgba(96, 165, 250, 0.5)" }}
         ></div>
 

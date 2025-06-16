@@ -83,7 +83,7 @@ export default function Header() {
               ))}
               <Button
                 size="sm"
-                className="ml-4 bg-linear-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+                className="ml-4 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
               >
                 Hire Me
               </Button>
@@ -125,7 +125,7 @@ export default function Header() {
               ))}
               <Button
                 size="sm"
-                className="w-full mt-4 bg-linear-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+                className="w-full mt-4 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
               >
                 Hire Me
               </Button>

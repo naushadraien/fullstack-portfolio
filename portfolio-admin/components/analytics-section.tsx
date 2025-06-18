@@ -195,7 +195,7 @@ export function AnalyticsSection() {
             <div className="space-y-4">
               {recentActivity.map((activity, index) => (
                 <div key={index} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="h-2 w-2 rounded-full bg-blue-600 mt-2" />
                   </div>
                   <div className="flex-1 min-w-0">

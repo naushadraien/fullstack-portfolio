@@ -113,7 +113,7 @@ export function ImagesSection() {
             <CardFooter className="flex items-center justify-between">
               <Button
                 size="sm"
-                variant={image.isActive ? "outline" : "default"}
+                variant={image.isActive ? "outline-solid" : "default"}
                 onClick={() => handleToggleActive(image.id)}
               >
                 {image.isActive ? "Deactivate" : "Activate"}

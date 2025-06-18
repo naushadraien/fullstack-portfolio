@@ -49,7 +49,7 @@ export default function CustomCursor() {
     <>
       {/* Main rocket cursor */}
       <motion.div
-        className="fixed top-0 left-0 z-[100] pointer-events-none"
+        className="fixed top-0 left-0 z-100 pointer-events-none"
         animate={{
           x: position.x - 20,
           y: position.y - 20,
@@ -76,7 +76,7 @@ export default function CustomCursor() {
           {/* Rocket trail/flame effect when hovering clickable elements */}
           {isPointer && (
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 translate-y-full">
-              <div className="w-3 h-8 bg-gradient-to-b from-blue-500 via-blue-300 to-transparent rounded-full animate-pulse" />
+              <div className="w-3 h-8 bg-linear-to-b from-blue-500 via-blue-300 to-transparent rounded-full animate-pulse" />
             </div>
           )}
         </div>
@@ -84,7 +84,7 @@ export default function CustomCursor() {
 
       {/* Small dot for precision */}
       <motion.div
-        className="fixed top-0 left-0 z-[100] w-1 h-1 bg-white rounded-full pointer-events-none"
+        className="fixed top-0 left-0 z-100 w-1 h-1 bg-white rounded-full pointer-events-none"
         animate={{
           x: position.x,
           y: position.y,

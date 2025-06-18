@@ -298,7 +298,7 @@ export default function HeroSection() {
                 <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" variants={item}>
                   <Button
                     size="lg"
-                    className="text-lg px-8 btn-hover-effect bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 hoverable"
+                    className="text-lg px-8 btn-hover-effect bg-linear-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 hoverable"
                   >
                     View My Work
                   </Button>
@@ -326,7 +326,7 @@ export default function HeroSection() {
                 key={index}
                 href={social.href}
                 aria-label={social.label}
-                className="bg-black/30 hover:bg-primary/80 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-300 hoverable"
+                className="bg-black/30 hover:bg-primary/80 text-white p-3 rounded-full backdrop-blur-xs transition-all duration-300 hoverable"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -342,7 +342,7 @@ export default function HeroSection() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   size="lg"
-                  className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 hoverable"
+                  className="flex items-center gap-2 bg-linear-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 hoverable"
                 >
                   <FileText className="h-5 w-5" />
                   PDF Resume

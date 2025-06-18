@@ -112,7 +112,7 @@ export default function ProjectsSection() {
             {categories.map((category) => (
               <Button
                 key={category}
-                variant={activeFilter === category ? "default" : "outline"}
+                variant={activeFilter === category ? "default" : "outline-solid"}
                 onClick={() => setActiveFilter(category)}
                 className="capitalize"
               >
@@ -140,7 +140,7 @@ export default function ProjectsSection() {
                     className="object-cover transition-transform duration-700 hover:scale-110" // Slowed down animation
                   />
                 </div>
-                <CardContent className="p-6 flex-grow">
+                <CardContent className="p-6 grow">
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p className="text-foreground/70 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mt-auto">

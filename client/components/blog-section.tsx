@@ -136,7 +136,7 @@ export default function BlogSection() {
                     <Badge className="bg-primary hover:bg-primary/90">{post.category}</Badge>
                   </div>
                 </div>
-                <CardContent className="p-6 flex-grow">
+                <CardContent className="p-6 grow">
                   <div className="flex items-center text-sm text-foreground/60 mb-3">
                     <div className="flex items-center mr-4">
                       <Calendar className="h-4 w-4 mr-1" />

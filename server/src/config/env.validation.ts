@@ -1,6 +1,27 @@
 import { z } from 'zod';
 
-export const zodEnvSchema = z.object({});
+export const zodEnvSchema = z.object({
+  PORT: z
+    .string()
+    .transform((val) => {
+      const parsed = parseInt(val, 10);
+      if (isNaN(parsed)) return 4000;
+      return parsed;
+    })
+    .pipe(
+      z
+        .number()
+        .int()
+        .positive()
+        .max(65535, { message: 'Port must be between 1 and 65535' }),
+    )
+    .default('4000')
+    .describe('This is server port'),
+  DATABASE_URL: z
+    .string()
+    .min(1, { message: 'Database url cannot be empty' })
+    .describe('Your favorite db url'),
+});
 
 export type EnvConfig = z.infer<typeof zodEnvSchema>;
 

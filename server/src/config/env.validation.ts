@@ -21,6 +21,15 @@ export const zodEnvSchema = z.object({
     .string()
     .min(1, { message: 'Database url cannot be empty' })
     .describe('Your favorite db url'),
+  AWS_PUBLIC_BUCKET_NAME: z.string().describe('AWS public bucket name'),
+  AWS_REGION: z.string().describe('Aws region'),
+  AWS_ACCESS_KEY: z.string().describe('AWS_ACCESS_KEY of the app'),
+  AWS_SECRET_ACCESS_KEY: z
+    .string()
+    .describe('AWS_SECRET_ACCESS_KEY of the app'),
+  AWS_CLOUDFRONT_DISTRIBUTION_DOMAIN_NAME: z
+    .string()
+    .describe('AWS_CLOUDFRONT_DISTRIBUTION_DOMAIN_NAME of the app'),
 });
 
 export type EnvConfig = z.infer<typeof zodEnvSchema>;

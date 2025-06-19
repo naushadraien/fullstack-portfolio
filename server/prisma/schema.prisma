@@ -13,3 +13,109 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                 Int      @id @default(autoincrement())
+  email              String   @unique
+  name               String?
+  password           String
+  hashedRefreshToken String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  projects       Project[]
+  personalImages PersonalImage[]
+  skills         Skill[]
+  experiences    Experience[]
+  contactInfo    ContactInfo[]
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String?
+  imageUrl     String?
+  projectUrl   String?
+  githubUrl    String?
+  technologies String[]
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Foreign key
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PersonalImage {
+  id        Int      @id @default(autoincrement())
+  title     String
+  imageUrl  String
+  altText   String?
+  category  String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign key
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  proficiency Int      @default(0)
+  iconUrl     String?
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign key
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id           Int       @id @default(autoincrement())
+  jobTitle     String
+  company      String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  isCurrent    Boolean   @default(false)
+  description  String?
+  achievements String[]
+  skills       String[]
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Foreign key
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ContactInfo {
+  id        Int      @id @default(autoincrement())
+  email     String
+  phone     String?
+  location  String?
+  linkedin  String?
+  github    String?
+  twitter   String?
+  website   String?
+  resume    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign key
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

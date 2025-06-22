@@ -5,6 +5,8 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { validateConfig } from './config/env.validation';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { validateConfig } from './config/env.validation';
       load: [appConfig],
       validate: validateConfig,
     }),
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

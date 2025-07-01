@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id                 Int      @id @default(autoincrement())
+  id                 String   @id @default(uuid()) @db.Uuid
   email              String   @unique
   name               String?
   password           String
@@ -31,7 +31,7 @@ model User {
 }
 
 model Project {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(uuid()) @db.Uuid
   name         String
   description  String?
   imageUrl     String?
@@ -44,8 +44,8 @@ model Project {
   updatedAt    DateTime @updatedAt
 
   // Foreign key
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PersonalImage {
@@ -60,12 +60,12 @@ model PersonalImage {
   updatedAt DateTime @updatedAt
 
   // Foreign key
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Skill {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid()) @db.Uuid
   name        String
   category    String
   proficiency Int      @default(0)
@@ -76,12 +76,12 @@ model Skill {
   updatedAt   DateTime @updatedAt
 
   // Foreign key
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Experience {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid()) @db.Uuid
   jobTitle     String
   company      String
   location     String?
@@ -96,12 +96,12 @@ model Experience {
   updatedAt    DateTime  @updatedAt
 
   // Foreign key
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ContactInfo {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   email     String
   phone     String?
   location  String?
@@ -115,6 +115,6 @@ model ContactInfo {
   updatedAt DateTime @updatedAt
 
   // Foreign key
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

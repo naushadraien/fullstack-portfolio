@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id                 String   @id @default(uuid()) @db.Uuid
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email              String   @unique
   name               String?
   password           String
@@ -43,13 +37,12 @@ model Project {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Foreign key
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PersonalImage {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   title     String
   imageUrl  String
   altText   String?
@@ -59,8 +52,7 @@ model PersonalImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Foreign key
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -75,8 +67,7 @@ model Skill {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Foreign key
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -95,8 +86,7 @@ model Experience {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  // Foreign key
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -114,7 +104,6 @@ model ContactInfo {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Foreign key
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

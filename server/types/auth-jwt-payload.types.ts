@@ -1,3 +1,3 @@
 export type AuthJWTPayload = {
-  sub: number;
+  sub: string;
 };

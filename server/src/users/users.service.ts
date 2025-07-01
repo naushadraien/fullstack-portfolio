@@ -29,7 +29,7 @@ export class UsersService {
       },
     });
   }
-  async findUserById(userId: number) {
+  async findUserById(userId: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,
@@ -41,7 +41,7 @@ export class UsersService {
     return user;
   }
   async updateHashedRefreshToken(
-    userId: number,
+    userId: string,
     hashedRefreshToken: string | null,
   ) {
     return await this.prismaService.user.update({

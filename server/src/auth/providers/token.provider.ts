@@ -28,7 +28,7 @@ export class TokenProvider {
     >,
   ) {}
 
-  async generateTokens(userId: number) {
+  async generateTokens(userId: string) {
     const payload: AuthJWTPayload = { sub: userId };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
@@ -40,13 +40,13 @@ export class TokenProvider {
     };
   }
 
-  async validateJwtUser(userId: number) {
+  async validateJwtUser(userId: string) {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new UnauthorizedException('User not found!');
     return { id: user.id, email: user.email };
   }
 
-  async refresh(userId: number, name: string) {
+  async refresh(userId: string, name: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRefreshToken =
       await this.hashProvider.hashRefreshToken(refreshToken);
@@ -62,7 +62,7 @@ export class TokenProvider {
     };
   }
 
-  async validateRefreshToken(userId: number, refreshToken: string) {
+  async validateRefreshToken(userId: string, refreshToken: string) {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException('User not found!');
     const isRefreshTokenMatched = await this.hashProvider.compareRefreshToken(

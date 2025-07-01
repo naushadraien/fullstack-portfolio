@@ -9,10 +9,12 @@ import refreshConfig from './config/refresh.config';
 import { Argon2Provider } from './providers/argon2.provider';
 import { HashingProvider } from './providers/hashing.provider';
 import { TokenProvider } from './providers/token.provider';
-import { ValidateUserProvider } from './providers/validate-user.provider';
+import { UserProvider } from './providers/user.provider';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -31,8 +33,12 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
     LocalStrategy,
     RefreshTokenStrategy,
     JwtStrategy,
-    ValidateUserProvider,
+    UserProvider,
     TokenProvider,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   exports: [HashingProvider],
 })

@@ -1,18 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { ValidateUserProvider } from './providers/validate-user.provider';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { TokenProvider } from './providers/token.provider';
+import { UserProvider } from './providers/user.provider';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly validateUserProvider: ValidateUserProvider) {}
+  constructor(
+    private readonly userProvider: UserProvider,
+    private readonly tokenProvider: TokenProvider,
+  ) {}
 
   async validateUser(email: string, password: string) {
-    return await this.validateUserProvider.validateUser(email, password);
+    return await this.userProvider.validateUser(email, password);
   }
 
-  async validateJwtUser(userId: number) {
-    return await this.validateJwtUser(userId);
+  async validateJwtUser(userId: string) {
+    return await this.tokenProvider.validateJwtUser(userId);
   }
-  async validateRefreshToken(userId: number, refreshToken: string) {
-    return await this.validateRefreshToken(userId, refreshToken);
+  async validateRefreshToken(userId: string, refreshToken: string) {
+    return await this.tokenProvider.validateRefreshToken(userId, refreshToken);
+  }
+
+  async registerUser(createUserDto: CreateUserDto) {
+    return await this.userProvider.registerUser(createUserDto);
+  }
+
+  async loginUser(user: User) {
+    return await this.userProvider.login(user);
+  }
+
+  async logOut(userId: string) {
+    return await this.userProvider.logOut(userId);
   }
 }

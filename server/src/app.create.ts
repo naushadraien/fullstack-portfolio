@@ -20,12 +20,12 @@ export function appCreate(app: INestApplication): void {
   );
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Blog App Api')
-    .setDescription('This is blog app built with Nestjs')
+    .setTitle('Portfolio Api')
+    .setDescription('This is portfolio backend built with Nestjs')
     .setVersion('1.0')
-    .setTermsOfService('http://localhost:3000/termsofservice')
+    .setTermsOfService('http://localhost:4000/termsofservice')
     .setLicense('MIT License', '')
-    .addServer('http://localhost:3000')
+    .addServer('http://localhost:4000')
     .build();
 
   const documentFactory = () =>

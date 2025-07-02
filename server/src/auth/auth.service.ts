@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { ActiveUserData } from 'src/common/decorators/active-user.decorator';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { TokenProvider } from './providers/token.provider';
 import { UserProvider } from './providers/user.provider';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
     return await this.userProvider.registerUser(createUserDto);
   }
 
-  async loginUser(user: User) {
+  async loginUser(user: ActiveUserData) {
     return await this.userProvider.login(user);
   }
 

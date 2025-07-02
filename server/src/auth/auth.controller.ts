@@ -4,11 +4,16 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ActiveUser,
+  ActiveUserData,
+} from 'src/common/decorators/active-user.decorator';
+import { ExcludeFields } from 'src/common/decorators/exclude-fields.decorator';
+import { ExcludeFieldsInterceptor } from 'src/interceptors/exclude-fields.interceptor';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
@@ -33,12 +38,11 @@ export class AuthController {
     status: 201,
     description: 'User successfully registered',
     example: {
-      id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+      id: '40a47dc0-6f89-4a09-82ef-83c8a02bcef9',
       email: 'john.doe@example.com',
       name: 'John Doe',
-      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      createdAt: '2025-07-01T12:00:00.000Z',
+      createdAt: '2025-07-02T15:41:08.765Z',
+      updatedAt: '2025-07-02T15:41:08.765Z',
     },
   })
   @ApiResponse({
@@ -62,6 +66,7 @@ export class AuthController {
       error: 'Conflict',
     },
   })
+  @UseInterceptors(ExcludeFieldsInterceptor)
   @Public()
   @Post('register')
   async registerUser(@Body() createUserDto: CreateUserDto) {
@@ -96,11 +101,13 @@ export class AuthController {
     status: 200,
     description: 'User successfully logged in',
     example: {
-      id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+      id: '9bb4cafd-7152-469e-b5e7-8d4ebbb8d1ff',
+      accessToken: 'nfbgjdfkjfkjdgkjfdkjgbkjdfbkgbdfgl',
+      refreshToken: 'gbfjgbfdbjgd',
       email: 'john.doe@example.com',
       name: 'John Doe',
-      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      createdAt: '2025-07-02T15:27:27.508Z',
+      updatedAt: '2025-07-02T15:29:26.647Z',
     },
   })
   @ApiResponse({
@@ -121,17 +128,14 @@ export class AuthController {
       error: 'Bad Request',
     },
   })
+  @UseInterceptors(ExcludeFieldsInterceptor)
+  @ExcludeFields('password', 'hashedRefreshToken')
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Post('login')
   @HttpCode(HttpStatus.OK)
-  loginUser(
-    @Request()
-    req: {
-      user: User;
-    },
-  ) {
-    return this.authService.loginUser(req.user);
+  @Post('login')
+  loginUser(@ActiveUser() user: ActiveUserData) {
+    return this.authService.loginUser(user);
   }
 
   @ApiOperation({
@@ -182,13 +186,44 @@ export class AuthController {
   })
   @Public()
   @UseGuards(RefreshAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Post('refresh')
-  refresh(
-    @Request()
-    req: {
-      user: User;
+  refresh(@ActiveUser() user: ActiveUserData) {
+    return this.tokenProvider.refresh(user.id);
+  }
+
+  @ApiOperation({
+    summary: 'Logging out the user',
+    description: 'This can be used to logging out the user',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Logged out successfully',
+    example: {
+      message: 'John Doe has been logged out successfully',
     },
-  ) {
-    return this.tokenProvider.refresh(req.user.id, req.user.name);
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or expired refresh token',
+    example: {
+      statusCode: 401,
+      message: 'Invalid refresh token',
+      error: 'Unauthorized',
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Refresh token expired',
+    example: {
+      statusCode: 403,
+      message: 'Refresh token has expired',
+      error: 'Forbidden',
+    },
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  async logout(@ActiveUser() user: ActiveUserData) {
+    return await this.authService.logOut(user.id);
   }
 }

@@ -46,7 +46,7 @@ export class TokenProvider {
     return { id: user.id, email: user.email };
   }
 
-  async refresh(userId: string, name: string) {
+  async refresh(userId: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRefreshToken =
       await this.hashProvider.hashRefreshToken(refreshToken);
@@ -55,8 +55,6 @@ export class TokenProvider {
       hashedRefreshToken,
     );
     return {
-      id: userId,
-      name,
       accessToken,
       refreshToken,
     };
@@ -71,6 +69,10 @@ export class TokenProvider {
     );
     if (!isRefreshTokenMatched)
       throw new UnauthorizedException('Invalid refresh token');
-    return { id: user.id, name: user.name };
+
+    delete user.password;
+    delete user.hashedRefreshToken;
+
+    return user;
   }
 }

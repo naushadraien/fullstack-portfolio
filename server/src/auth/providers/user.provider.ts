@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { ActiveUserData } from 'src/common/decorators/active-user.decorator';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { HashingProvider } from './hashing.provider';
@@ -31,6 +31,9 @@ export class UserProvider {
     if (!isPasswordMatched)
       throw new UnauthorizedException('Invalid Credentials!');
 
+    delete user.password;
+    delete user.hashedRefreshToken;
+
     return user;
   }
 
@@ -42,7 +45,7 @@ export class UserProvider {
     return await this.usersService.create(createUserDto);
   }
 
-  async login(user: User) {
+  async login(user: ActiveUserData) {
     const { id: userId, ...rest } = user;
     const { accessToken, refreshToken } =
       await this.tokenProvider.generateTokens(userId);
@@ -61,6 +64,10 @@ export class UserProvider {
   }
 
   async logOut(userId: string) {
-    return await this.usersService.updateHashedRefreshToken(userId, null);
+    const user = await this.usersService.updateHashedRefreshToken(userId, null);
+
+    return {
+      message: `${user.name} has been logged out successfully`,
+    };
   }
 }

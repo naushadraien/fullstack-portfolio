@@ -8,7 +8,14 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   ActiveUser,
   ActiveUserData,
@@ -203,8 +210,10 @@ export class AuthController {
     return this.tokenProvider.refresh(user.id);
   }
 
+  // @ApiCookieAuth('accessToken')
+  @ApiBearerAuth('bearer-auth')
   @ApiOperation({
-    summary: 'Logging out the user',
+    summary: 'Logout out the user',
     description: 'This can be used to logging out the user',
   })
   @ApiResponse({

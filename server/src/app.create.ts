@@ -29,6 +29,25 @@ export function appCreate(app: INestApplication): void {
     .setTermsOfService('http://localhost:4000/termsofservice')
     .setLicense('MIT License', '')
     .addServer('http://localhost:4000')
+    // ✅ Add Bearer Auth configuration
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'bearer-auth', // This name should match the name used in @ApiBearerAuth()
+    )
+    // Cookie Authentication (if we're also using cookies)
+    .addCookieAuth('accessToken', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'accessToken',
+      description: 'Access token stored in cookie',
+    })
     .build();
 
   const documentFactory = () =>

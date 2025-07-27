@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -20,6 +21,8 @@ import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { TokenProvider } from './providers/token.provider';
+import { Response } from 'express';
+import { CookieProvider } from './providers/cookie.provider';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -27,6 +30,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenProvider: TokenProvider,
+    private readonly cookieProvider: CookieProvider,
   ) {}
 
   @ApiOperation({
@@ -134,8 +138,15 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  loginUser(@ActiveUser() user: ActiveUserData) {
-    return this.authService.loginUser(user);
+  async loginUser(
+    @ActiveUser() user: ActiveUserData,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.loginUser(user);
+
+    this.cookieProvider.setAccessTokenCookie(res, result.accessToken);
+
+    return result;
   }
 
   @ApiOperation({
@@ -223,7 +234,12 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async logout(@ActiveUser() user: ActiveUserData) {
+  async logout(
+    @ActiveUser() user: ActiveUserData,
+    @Res({ passthrough: true }) res: Response, //@Res({ passthrough: true }) - Allows NestJS to handle the response
+    //@Res() without passthrough - You must manually send the response using res.status().json() or res.send()
+  ) {
+    this.cookieProvider.clearAccessTokenCookie(res);
     return await this.authService.logOut(user.id);
   }
 }

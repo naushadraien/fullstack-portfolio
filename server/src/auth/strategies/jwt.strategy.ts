@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 import jwtConfig from '../config/jwt.config';
 import { AuthJWTPayload } from 'types/auth-jwt-payload.types';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,7 +15,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly authService: AuthService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        // First try to extract from Authorization header
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        // Then try to extract from cookies
+        (request: Request) => {
+          return request?.cookies?.accessToken || null;
+        },
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtConfiguration.secret,
     });

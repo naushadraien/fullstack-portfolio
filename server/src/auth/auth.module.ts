@@ -15,6 +15,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CookieProvider } from './providers/cookie.provider';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    CookieProvider,
   ],
   exports: [HashingProvider],
 })

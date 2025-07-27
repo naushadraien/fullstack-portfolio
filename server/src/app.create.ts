@@ -4,9 +4,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { config } from 'aws-sdk';
 import helmet from 'helmet';
 import { corsOptions } from './config/cors-options';
+import * as cookieParser from 'cookie-parser';
 
 export function appCreate(app: INestApplication): void {
   app.use(helmet());
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -30,7 +33,7 @@ export function appCreate(app: INestApplication): void {
 
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('api/docs', app, documentFactory);
 
   const configService = app.get(ConfigService);
   config.update({

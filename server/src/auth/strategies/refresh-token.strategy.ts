@@ -18,10 +18,18 @@ export class RefreshTokenStrategy extends PassportStrategy(
     private readonly authService: AuthService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        // Extract refresh token from cookie
+        (request: Request) => {
+          return request?.cookies?.refreshToken || null;
+        },
+        // Fallback to body or header
+        ExtractJwt.fromBodyField('refreshToken'),
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
-      secretOrKey: refreshTokenConfiguration.secret,
-      passReqToCallback: true,
+      secretOrKey: refreshTokenConfiguration.secret, // Different secret for refresh tokens
+      passReqToCallback: true, // Pass request to validate method
     });
   }
 

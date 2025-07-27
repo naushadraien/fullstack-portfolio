@@ -14,7 +14,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { password, ...user } = createUserDto;
     const hashedPassword = await this.hashingProvider.hashPassword(password);
-    return this.prismaService.user.create({
+    return this.prismaService.extendedPrismaClient().user.create({
       data: {
         password: hashedPassword,
         ...user,
@@ -23,18 +23,20 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return this.prismaService.user.findUnique({
+    return this.prismaService.extendedPrismaClient().user.findUnique({
       where: {
         email,
       },
     });
   }
   async findUserById(userId: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    const user = await this.prismaService
+      .extendedPrismaClient()
+      .user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
     if (user) {
       delete user.password;
     }
@@ -44,7 +46,7 @@ export class UsersService {
     userId: string,
     hashedRefreshToken: string | null,
   ) {
-    return await this.prismaService.user.update({
+    return await this.prismaService.extendedPrismaClient().user.update({
       where: {
         id: userId,
       },

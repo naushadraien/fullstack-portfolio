@@ -2,14 +2,17 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { config } from 'aws-sdk';
-import helmet from 'helmet';
-import { corsOptions } from './config/cors-options';
 import * as cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
+import { corsOptions } from './config/cors-options';
 
 export function appCreate(app: INestApplication): void {
   app.use(helmet());
 
   app.use(cookieParser());
+
+  app.useLogger(app.get(Logger));
 
   app.useGlobalPipes(
     new ValidationPipe({

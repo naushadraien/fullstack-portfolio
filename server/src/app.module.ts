@@ -2,6 +2,9 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import * as crypto from 'crypto';
+import { ClsMiddleware, ClsModule } from 'nestjs-cls';
+import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -43,6 +46,35 @@ const THROTTLER_CONFIG: {
     UsersModule,
     AuthModule,
     ThrottlerModule.forRoot(THROTTLER_CONFIG),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport:
+          process.env.NODE_ENV === 'production'
+            ? undefined
+            : {
+                target: 'pino-pretty',
+                options: {
+                  translateTime: 'SYS:standard',
+                  singleLine: false,
+                  colorize: true,
+                  ignore:
+                    'pid,hostname,req,res,responseTime,req.headers,req.remoteAddress,req.remotePort,res.headers',
+                },
+              },
+        customProps: (req: any) => ({
+          requestId: req.headers['x-request-id'],
+          userId: req.user?.id,
+          method: req.method,
+          url: req.url,
+        }),
+        genReqId: (req) =>
+          req.headers['x-request-id'] || crypto.randomBytes(8).toString('hex'),
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -55,6 +87,6 @@ const THROTTLER_CONFIG: {
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+    consumer.apply(ClsMiddleware, RequestLoggerMiddleware).forRoutes('*');
   }
 }

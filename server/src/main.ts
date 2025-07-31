@@ -7,7 +7,9 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const port = process.env.PORT || 3000;
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   appCreate(app);
 
   await app.listen(port);

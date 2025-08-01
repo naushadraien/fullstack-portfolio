@@ -11,11 +11,11 @@ import {
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiCookieAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import {
   ActiveUser,
   ActiveUserData,
@@ -27,9 +27,9 @@ import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
-import { TokenProvider } from './providers/token.provider';
-import { Response } from 'express';
+import { RolesGuard } from './guards/roles.guard';
 import { CookieProvider } from './providers/cookie.provider';
+import { TokenProvider } from './providers/token.provider';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -241,6 +241,7 @@ export class AuthController {
       error: 'Forbidden',
     },
   })
+  @UseGuards(RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   async logout(

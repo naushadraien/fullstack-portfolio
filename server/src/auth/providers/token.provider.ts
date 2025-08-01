@@ -43,7 +43,7 @@ export class TokenProvider {
   async validateJwtUser(userId: string) {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new UnauthorizedException('User not found!');
-    return { id: user.id, email: user.email };
+    return { id: user.id, email: user.email, role: user.role };
   }
 
   async refresh(userId: string) {

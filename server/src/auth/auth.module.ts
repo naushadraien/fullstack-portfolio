@@ -1,21 +1,21 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import jwtConfig from './config/jwt.config';
 import refreshConfig from './config/refresh.config';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Argon2Provider } from './providers/argon2.provider';
+import { CookieProvider } from './providers/cookie.provider';
 import { HashingProvider } from './providers/hashing.provider';
 import { TokenProvider } from './providers/token.provider';
 import { UserProvider } from './providers/user.provider';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { CookieProvider } from './providers/cookie.provider';
 
 @Module({
   imports: [
